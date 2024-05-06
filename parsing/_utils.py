@@ -15,10 +15,6 @@ if sys.version_info < (3, 7):
     sys.exit("This script requires Python 3.7 or higher"
              " (to support dict ordering guarantees)")
 
-# Get user-defined configuration file (has user paths, etc.).
-with open('config.yaml', 'r') as file:
-    config = yaml.safe_load(file)
-
 #------------------------------------------------------------------------------
 
 #-----
