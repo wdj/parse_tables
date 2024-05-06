@@ -1,0 +1,228 @@
+#!/usr/bin/env python3
+"""============================================================================
+
+Test correctness of classes that process .mdb tables.
+
+============================================================================"""
+
+import os
+import sys
+import csv
+
+# Do tis to avoid csv size failure.
+# https://stackoverflow.com/questions/15063936/csv-error-field-larger-than-field-limit-131072
+csv.field_size_limit(sys.maxsize)
+
+import pyodbc
+
+sys.path.append(os.path.join(os.path.dirname(__file__), 'parsing'))
+
+import _utils
+from rules_clitic import RulesClitic
+from rules_transfer import RulesTransfer
+from rules_complex_concepts import RulesComplexConcepts
+from rules_relativization_restructuring import RulesRelativizationRestructuring
+from rules_noun_noun_relationship_restructuring import (
+    RulesNounNounRelationshipRestructuring)
+from rules_theta_grid_adjustments import RulesThetaGridAdjustments
+from rules_movement import RulesMovement
+from rules_pronoun_identification import RulesPronounIdentification
+from rules_text_preprocessing import RulesTextPreprocessing
+from rules_feature_collapsing import RulesFeatureCollapsing
+from rules_speech_styles import RulesSpeechStyles
+from rules_tense_aspect_mood import RulesTenseAspectMood
+from rules_relative_clauses import RulesRelativeClauses
+from rules_noun_noun_relationships import RulesNounNounRelationships
+from rules_feature_copying import RulesFeatureCopying
+from rules_spellout import RulesSpellout
+from rules_pronoun_spellout import RulesPronounSpellout
+from rules_lexical import RulesLexical
+from rules_phrase_structure import RulesPhraseStructure
+from rules_word_morphophonemic import RulesWordMorphophonemic
+from rules_find_replace import RulesFindReplace
+from rules_groups import RulesGroups
+from character_feature_values import CharacterFeatureValues
+from phonetic_features import PhoneticFeatures
+from sorting_sequence import SortingSequence
+from features_source import FeaturesSource
+from features_target import FeaturesTarget
+from lexical_form_names import LexicalFormNames
+from source_users_nouns import SourceUsersNouns
+from source_users_adjectives import SourceUsersAdjectives
+from source_users_adpositions import SourceUsersAdpositions
+from source_users_adverbs import SourceUsersAdverbs
+from source_users_conjunctions import SourceUsersConjunctions
+from source_users_particles import SourceUsersParticles
+from source_users_pronouns import SourceUsersPronouns
+from source_users_verbs import SourceUsersVerbs
+from nouns import Nouns
+from adjectives import Adjectives
+from adpositions import Adpositions
+from adverbs import Adverbs
+from conjunctions import Conjunctions
+from particles import Particles
+from pronouns import Pronouns
+from verbs import Verbs
+from adposition_mappings_english import AdpositionMappingsEnglish
+from conjunction_mappings_english import ConjunctionMappingsEnglish
+from noun_mappings_english import NounMappingsEnglish
+from particle_mappings_english import ParticleMappingsEnglish
+from pronoun_mappings_english import PronounMappingsEnglish
+from adverb_mappings_english import AdverbMappingsEnglish
+from verb_mappings_english import VerbMappingsEnglish
+from adjective_mappings_english import AdjectiveMappingsEnglish
+
+#==============================================================================
+
+def instantiate_from_string(class_name):
+    """Create instance of class based on only the class name in a string."""
+
+    # Retrieve the class name from globals dictionary.
+    cls = globals()[class_name]
+    # Instantiate the class so that it is callable.
+    instance = cls()
+    return instance
+
+#------------------------------------------------------------------------------
+
+def main():
+    """Main function to test table parsing."""
+
+    if len(sys.argv) < 2:
+        print("Usage: tester <dir_csv>")
+        sys.exit()
+
+    # Path to the csv files that have been generated from mdb files.
+    csv_path = sys.argv[1]
+
+    # list of languages we are testing on.
+    # NOTE: some are commented out since they seem nonconformant to the
+    # format of English.mdb (e.g., Rules_Clitic missing CliticAttached field)
+
+    langs = [
+        'Ayta_Mag-indi',
+        #'Chinese',
+        'English',
+        #'Gichuka',
+        #'Hindi',
+        'Ibwe',
+        #'Indonesian',
+        'Ingush',
+        #'Jula',
+        #'Kewa',
+        #'Korean',
+        #'Kortizian',
+        'Migabac',
+        'Russian',
+        'Tagalog',
+        #'Urdu',
+    ]
+
+    #langs = ['English']
+
+    # Tables we are testing here.
+
+    table_names = [
+        'Rules_Clitic',
+        'Rules_Transfer',
+        'Rules_ComplexConcepts',
+        'Rules_RelativizationRestructuring',
+        'Rules_NounNounRelationshipRestructuring',
+        'Rules_ThetaGridAdjustments',
+        'Rules_Movement',
+        'Rules_PronounIdentification',
+        'Rules_TextPreprocessing',
+        'Rules_FeatureCollapsing',
+        'Rules_SpeechStyles',
+        'Rules_TenseAspectMood',
+        'Rules_RelativeClauses',
+        'Rules_NounNounRelationships',
+        'Rules_FeatureCopying',
+        'Rules_Spellout',
+        'Rules_PronounSpellout',
+        'Rules_Lexical',
+        'Rules_PhraseStructure',
+        'Rules_WordMorphophonemic',
+        'Rules_FindReplace',
+        'Rules_Groups',
+        'CharacterFeatureValues',
+        'PhoneticFeatures',
+        'Sorting_Sequence',
+        'Features_Source',
+        'Features_Target',
+        'LexicalFormNames',
+        'Source_UsersNouns',
+        'Source_UsersAdjectives',
+        'Source_UsersAdpositions',
+        'Source_UsersAdverbs',
+        'Source_UsersConjunctions',
+        'Source_UsersParticles',
+        'Source_UsersPronouns',
+        'Source_UsersVerbs',
+        'Nouns',
+        'Adjectives',
+        'Adpositions',
+        'Adverbs',
+        'Conjunctions',
+        'Particles',
+        'Pronouns',
+        'Verbs',
+        'Adposition_Mappings_English',
+        'Conjunction_Mappings_English',
+        'Noun_Mappings_English',
+        'Particle_Mappings_English',
+        'Pronoun_Mappings_English',
+        'Adverb_Mappings_English',
+        'Verb_Mappings_English',
+        'Adjective_Mappings_English',
+    ]
+
+    for lang in langs:
+
+        for table_name in table_names:
+
+            file_path = os.path.join(csv_path, lang, table_name + '.csv')
+            print(file_path)
+
+            # Get the table from the file.
+            # NOTE: file_path is the result of `mdb-export run on MacOS`
+            with open(file_path, newline='') as csvfile:
+                reader = csv.reader(csvfile)
+                table = [row for row in reader]
+
+            # Create an object of the class with name denoted by "table_name".
+            table_object = instantiate_from_string(table_name.replace('_', ''))
+
+            table_object.import_table(table)
+
+            table_out = table_object.export_table()
+
+            if len(table_out) != len(table):
+                sys.exit(f'Error: table has wrong number of records '
+                         f'expected {len(table)} found {len(table_out)}')
+
+            for i, record in enumerate(table):
+
+                if len(table_out[i]) != len(table[i]):
+                    sys.exit(f'Error: record {i} has wrong number of fields '
+                             f'expected {len(table[i])} '
+                             f'found {len(table_out[i])}')
+
+                for j, field in enumerate(record):
+
+                    # Seek exact match of field value,
+                    # original vs. imported-then-exported.
+
+                    if table_out[i][j] != field:
+
+                        sys.exit(f'Error: record {i} fieldname {table[0][j]} '
+                                 f'expected {field} found {table_out[i][j]}')
+
+#==============================================================================
+# Command line interface.
+
+if __name__ == '__main__':
+
+    main()
+
+#==============================================================================
