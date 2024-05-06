@@ -17,6 +17,6 @@ class RulesPronounIdentification(RulesTransfer):
     Most functionality is provided by base class.
     """
 
-    RULE_TYPE = _utils.RULE_TYPES['Rules_NounNounRelationshipRestructuring']
+    RULE_TYPE = _utils.RULE_TYPES['Rules_PronounIndentification']
 
 #==============================================================================
