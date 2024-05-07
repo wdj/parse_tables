@@ -72,6 +72,25 @@ from adverb_mappings_english import AdverbMappingsEnglish
 from verb_mappings_english import VerbMappingsEnglish
 from adjective_mappings_english import AdjectiveMappingsEnglish
 
+from ontology_adjectives import OntologyAdjectives
+from ontology_adpositions import OntologyAdpositions
+from ontology_adverbs import OntologyAdverbs
+from ontology_conjunctions import OntologyConjunctions
+from ontology_nouns import OntologyNouns
+from ontology_particles import OntologyParticles
+from ontology_pronouns import OntologyPronouns
+from ontology_verbs import OntologyVerbs
+from ontology_adjective_hierarchy import OntologyAdjectiveHierarchy
+from ontology_adposition_hierarchy import OntologyAdpositionHierarchy
+from ontology_adverb_hierarchy import OntologyAdverbHierarchy
+from ontology_conjunction_hierarchy import OntologyConjunctionHierarchy
+from ontology_noun_hierarchy import OntologyNounHierarchy
+from ontology_particle_hierarchy import OntologyParticleHierarchy
+from ontology_pronoun_hierarchy import OntologyPronounHierarchy
+from ontology_verb_hierarchy import OntologyVerbHierarchy
+from ontology_features_source import OntologyFeaturesSource
+from ontology_sorting_sequence import OntologySortingSequence
+
 #==============================================================================
 
 def instantiate_from_string(class_name):
@@ -99,7 +118,7 @@ def main():
     # NOTE: some are commented out since they seem nonconformant to the
     # format of English.mdb (e.g., Rules_Clitic missing CliticAttached field)
 
-    langs = [
+    db_names = [
         'Ayta_Mag-indi',
         #'Chinese',
         'English',
@@ -116,72 +135,92 @@ def main():
         'Russian',
         'Tagalog',
         #'Urdu',
+
+        'Ontology',
     ]
 
-    #langs = ['English']
+    for db_name in db_names:
 
-    # Tables we are testing here.
+        # Tables we are testing here.
 
-    table_names = [
-        'Rules_Clitic',
-        'Rules_Transfer',
-        'Rules_ComplexConcepts',
-        'Rules_RelativizationRestructuring',
-        'Rules_NounNounRelationshipRestructuring',
-        'Rules_ThetaGridAdjustments',
-        'Rules_Movement',
-        'Rules_PronounIdentification',
-        'Rules_TextPreprocessing',
-        'Rules_FeatureCollapsing',
-        'Rules_SpeechStyles',
-        'Rules_TenseAspectMood',
-        'Rules_RelativeClauses',
-        'Rules_NounNounRelationships',
-        'Rules_FeatureCopying',
-        'Rules_Spellout',
-        'Rules_PronounSpellout',
-        'Rules_Lexical',
-        'Rules_PhraseStructure',
-        'Rules_WordMorphophonemic',
-        'Rules_FindReplace',
-        'Rules_Groups',
-        'CharacterFeatureValues',
-        'PhoneticFeatures',
-        'Sorting_Sequence',
-        'Features_Source',
-        'Features_Target',
-        'LexicalFormNames',
-        'Source_UsersNouns',
-        'Source_UsersAdjectives',
-        'Source_UsersAdpositions',
-        'Source_UsersAdverbs',
-        'Source_UsersConjunctions',
-        'Source_UsersParticles',
-        'Source_UsersPronouns',
-        'Source_UsersVerbs',
-        'Nouns',
-        'Adjectives',
-        'Adpositions',
-        'Adverbs',
-        'Conjunctions',
-        'Particles',
-        'Pronouns',
-        'Verbs',
-        'Adposition_Mappings_English',
-        'Conjunction_Mappings_English',
-        'Noun_Mappings_English',
-        'Particle_Mappings_English',
-        'Pronoun_Mappings_English',
-        'Adverb_Mappings_English',
-        'Verb_Mappings_English',
-        'Adjective_Mappings_English',
-    ]
-
-    for lang in langs:
+        table_names = [
+            'Rules_Clitic',
+            'Rules_Transfer',
+            'Rules_ComplexConcepts',
+            'Rules_RelativizationRestructuring',
+            'Rules_NounNounRelationshipRestructuring',
+            'Rules_ThetaGridAdjustments',
+            'Rules_Movement',
+            'Rules_PronounIdentification',
+            'Rules_TextPreprocessing',
+            'Rules_FeatureCollapsing',
+            'Rules_SpeechStyles',
+            'Rules_TenseAspectMood',
+            'Rules_RelativeClauses',
+            'Rules_NounNounRelationships',
+            'Rules_FeatureCopying',
+            'Rules_Spellout',
+            'Rules_PronounSpellout',
+            'Rules_Lexical',
+            'Rules_PhraseStructure',
+            'Rules_WordMorphophonemic',
+            'Rules_FindReplace',
+            'Rules_Groups',
+            'CharacterFeatureValues',
+            'PhoneticFeatures',
+            'Sorting_Sequence',
+            'Features_Source',
+            'Features_Target',
+            'LexicalFormNames',
+            'Source_UsersNouns',
+            'Source_UsersAdjectives',
+            'Source_UsersAdpositions',
+            'Source_UsersAdverbs',
+            'Source_UsersConjunctions',
+            'Source_UsersParticles',
+            'Source_UsersPronouns',
+            'Source_UsersVerbs',
+            'Nouns',
+            'Adjectives',
+            'Adpositions',
+            'Adverbs',
+            'Conjunctions',
+            'Particles',
+            'Pronouns',
+            'Verbs',
+            'Adposition_Mappings_English',
+            'Conjunction_Mappings_English',
+            'Noun_Mappings_English',
+            'Particle_Mappings_English',
+            'Pronoun_Mappings_English',
+            'Adverb_Mappings_English',
+            'Verb_Mappings_English',
+            'Adjective_Mappings_English',
+        ] if db_name != 'Ontology' else [
+            'Ontology_Adjectives',
+            'Ontology_Adpositions',
+            'Ontology_Adverbs',
+            'Ontology_Conjunctions',
+            'Ontology_Nouns',
+            'Ontology_Particles',
+            'Ontology_Pronouns',
+            'Ontology_Verbs',
+            'Ontology_AdjectiveHierarchy',
+            'Ontology_AdpositionHierarchy',
+            'Ontology_AdverbHierarchy',
+            'Ontology_ConjunctionHierarchy',
+            'Ontology_NounHierarchy',
+            'Ontology_ParticleHierarchy',
+            'Ontology_PronounHierarchy',
+            'Ontology_VerbHierarchy',
+            'Ontology_Features_Source',
+            'Ontology_Sorting_Sequence',
+        ]
 
         for table_name in table_names:
 
-            file_path = os.path.join(csv_path, lang, table_name + '.csv')
+            file_path = os.path.join(csv_path, db_name,
+                            table_name.replace('Ontology_', '') + '.csv')
             print(file_path)
 
             # Get the table from the file.

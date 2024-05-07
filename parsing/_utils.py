@@ -255,6 +255,27 @@ RULE_TYPES = {
     'Features_Source': '74',
     'Features_Target': '75',
     'LexicalFormNames': '76',
+
+    'Ontology_Adjectives': '81',
+    'Ontology_Adpositions': '82',
+    'Ontology_Adverbs': '83',
+    'Ontology_Conjunctions': '84',
+    'Ontology_Nouns': '85',
+    'Ontology_Particles': '86',
+    'Ontology_Pronouns': '87',
+    'Ontology_Verbs': '88',
+
+    'Ontology_AdjectiveHierarchy': '91',
+    'Ontology_AdpositionHierarchy': '92',
+    'Ontology_AdverbHierarchy': '93',
+    'Ontology_ConjunctionHierarchy': '94',
+    'Ontology_NounHierarchy': '95',
+    'Ontology_ParticleHierarchy': '96',
+    'Ontology_PronounHierarchy': '97',
+    'Ontology_VerbHierarchy': '92',
+
+    'Ontology_Features_Source': '101',
+    'Ontology_Sorting_Sequence': '102',
 }
 
 RULE_TYPES_ALL = {

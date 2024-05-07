@@ -1,22 +1,22 @@
 #!/usr/bin/env python3
 """============================================================================
 
-Handle Rules_PronounIdentification table from <MyLanguage>.mdb file.
+Handle Verbs table from Ontology.mdb file.
 
 ============================================================================"""
 
 import _utils
-from rules_transfer import RulesTransfer
+from ontology_adpositions import OntologyAdpositions
 
 #==============================================================================
 
-class RulesPronounIdentification(RulesTransfer):
+class OntologyVerbs(OntologyAdpositions):
     """
-    Handle Rules_PronounIdentification table from <MyLanguage>.mdb file.
+    Handle Verbs table from Ontology.mdb file.
 
     Most functionality is provided by base class.
     """
 
-    RULE_TYPE = _utils.RULE_TYPES['Rules_PronounIdentification']
+    RULE_TYPE = _utils.RULE_TYPES['Ontology_Verbs']
 
 #==============================================================================

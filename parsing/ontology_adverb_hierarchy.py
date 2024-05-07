@@ -1,22 +1,22 @@
 #!/usr/bin/env python3
 """============================================================================
 
-Handle Rules_PronounIdentification table from <MyLanguage>.mdb file.
+Handle AdverbHierarchy table from Ontology.mdb file.
 
 ============================================================================"""
 
 import _utils
-from rules_transfer import RulesTransfer
+from ontology_adjective_hierarchy import OntologyAdjectiveHierarchy
 
 #==============================================================================
 
-class RulesPronounIdentification(RulesTransfer):
+class OntologyAdverbHierarchy(OntologyAdjectiveHierarchy):
     """
-    Handle Rules_PronounIdentification table from <MyLanguage>.mdb file.
+    Handle AdverbHierarchy table from Ontology.mdb file.
 
     Most functionality is provided by base class.
     """
 
-    RULE_TYPE = _utils.RULE_TYPES['Rules_PronounIdentification']
+    RULE_TYPE = _utils.RULE_TYPES['Ontology_AdverbHierarchy']
 
 #==============================================================================

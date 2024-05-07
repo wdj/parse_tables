@@ -8,12 +8,12 @@ if [ -z "$mdb_dir" -o -z "$csv_dir" ] ; then
   exit
 fi
 
-for lang in 'Ayta_Mag-indi' 'English' 'Ibwe' 'Ingush' 'Migabac' 'Russian' 'Tagalog' ; do
-  echo $lang
-  mkdir -p $csv_dir/$lang
-  for table in $(mdb-tables $mdb_dir/${lang}.mdb) ; do
+for db in 'Ayta_Mag-indi' 'English' 'Ibwe' 'Ingush' 'Migabac' 'Russian' 'Tagalog' 'Ontology' ; do
+  echo $db
+  mkdir -p $csv_dir/$db
+  for table in $(mdb-tables $mdb_dir/${db}.mdb) ; do
     echo "  $table"
-    mdb-export $mdb_dir/${lang}.mdb $table > $csv_dir/$lang/$(basename $table .mdb).csv
+    mdb-export $mdb_dir/${db}.mdb $table > $csv_dir/$db/$(basename $table .mdb).csv
   done
 done
 
