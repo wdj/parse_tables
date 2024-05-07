@@ -5,7 +5,7 @@ Python code for Parsing TaBiThA Tables
 Description
 -----------
 
-This code parses all .mdb tables relevant to the Generate process that are contained in the mylanguage.mdb and Onto.=logy.mdb files.
+This code parses all .mdb tables relevant to the Generate process that are contained in the mylanguage.mdb and Ontology.mdb files.
 
 This is a work in progress; some details may not be complete or correct.
 
